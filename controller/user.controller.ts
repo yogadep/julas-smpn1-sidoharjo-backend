@@ -3,6 +3,7 @@ import { UserService } from "../services/user.service";
 import { CreateUserSchema, UpdateUserSchema } from "../dto/user.validation";
 import { ZodError } from "zod";
 import { handleError } from "../utils/errorHandler";
+import { generateAuthToken } from "../utils/jwt.utils";
 
 // Initialize service
 const userService = new UserService();
@@ -49,13 +50,14 @@ export const createUser = async (req: Request, res: Response) => {
     try {
         const validatedData = CreateUserSchema.parse(req.body);
         const newUser = await userService.createUser(validatedData);
+
         
         // Remove the 'return' and just send the response
         res.status(201).json({
             success: true,
             message: 'User created successfully',
             statusCode: 201,
-            data: newUser
+            data: newUser,
         });
     } catch (error) {
         handleError(error, res);
