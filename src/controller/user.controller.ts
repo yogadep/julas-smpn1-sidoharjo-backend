@@ -3,7 +3,6 @@ import { UserService } from "../services/user.service";
 import { CreateUserSchema, UpdateUserSchema } from "../dto/user.validation";
 import { ZodError } from "zod";
 import { handleError } from "../utils/errorHandler";
-import { generateAuthToken } from "../utils/jwt.utils";
 
 // Initialize service
 const userService = new UserService();

@@ -1,8 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db';
-import userRouter from '../router/user.routes';
-import authRouter from '../router/auth.routes';
+import userRouter from './router/user.routes';
+import authRouter from './router/auth.routes';
 
 dotenv.config(); // Panggil di sini saja
 

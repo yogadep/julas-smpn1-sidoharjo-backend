@@ -1,4 +1,4 @@
-import { User } from "../src/models/User";
+import { User } from "../models/User";
 import { LoginDto } from "../dto/login.validation";
 import { PasswordService } from "../utils/password.service";
 import { generateAuthToken } from "../utils/jwt.utils";

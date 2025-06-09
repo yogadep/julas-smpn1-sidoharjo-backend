@@ -1,4 +1,4 @@
-import { User } from "../src/models/User";
+import { User } from "../models/User";
 import { PasswordService } from "../utils/password.service";
 import { CreateUserDto, UpdateUserDto } from "../dto/user.validation";
 import { Types } from "mongoose";
