@@ -44,7 +44,8 @@ const userSchema = new Schema<IUser>({
     required: false 
   },
   mataPelajaran: [{ 
-    type: String 
+    type: Schema.Types.ObjectId,
+    ref: 'Mapel'
   }],
   kelasYangDiampu: [{ 
     type: Schema.Types.ObjectId, 
