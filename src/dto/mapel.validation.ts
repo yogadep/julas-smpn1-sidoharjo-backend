@@ -7,3 +7,4 @@ export const CreateMapelSchema = z.object({
 });
 
 export type CreateMapelDto = z.infer<typeof CreateMapelSchema>;
+export type UpdateMapelDto = z.infer<typeof CreateMapelSchema>;

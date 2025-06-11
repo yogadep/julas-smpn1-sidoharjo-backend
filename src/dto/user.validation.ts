@@ -13,6 +13,10 @@ export const CreateUserSchema = z.object({
   kelasYangDiampu: z.array(z.string().transform(val => new Types.ObjectId(val))).optional(),
 });
 
+// TODO : Create endpoint to update password
+
+// partial : membuat semua field pada schema menjadi opsional
+// omit password : menghapus field password dari schema, agar tidak bisa diubah lewat schema ini
 export const UpdateUserSchema = CreateUserSchema.partial().omit({ password: true });
 
 // Export TypeScript types
