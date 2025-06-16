@@ -1,7 +1,6 @@
 import { Mapel } from "../models/Mapel";
 import { CreateMapelDto, UpdateMapelDto } from "../dto/mapel.validation";
 import { Types } from "mongoose";
-import { create } from "domain";
 
 export class MapelService {
     async getMapels() {
@@ -39,6 +38,16 @@ export class MapelService {
                 { $set: data},
                 { new: true, runValidators: true }
             ).lean();
+            return mapel;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteMapel(id: string){
+        try {
+            const ObjectId = new Types.ObjectId(id);
+            const mapel = await Mapel.findByIdAndDelete(ObjectId);
             return mapel;
         } catch (error) {
             throw error;

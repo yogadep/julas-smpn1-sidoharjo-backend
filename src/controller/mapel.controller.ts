@@ -24,7 +24,7 @@ export const getMapel = async (req: Request, res: Response) => {
         const mapel = await mapelService.getMapelById(req.params.id);
         res.status(200).json({
             success: true,
-            message: 'Mapels fetched successfully',
+            message: 'Mapel fetched successfully',
             statusCode: 200,
             data: mapel
         });
@@ -55,10 +55,24 @@ export const updateMapel = async (req: Request, res: Response) => {
 
         res.status(201).json({
             succwess: true,
-            message: 'Mapel created successfully',
+            message: 'Mapel updated successfully',
             statusCode: 201,
             data: mapel
         })
+    } catch (error) {
+        handleError(error, res);
+    }
+}
+
+export const deleteMapel = async (req: Request, res: Response) => {
+    try {
+        const mapel = await mapelService.deleteMapel(req.params.id);
+        res.status(200).json({
+            success: true,
+            message: 'Mapel deleted successfully',
+            statusCode: 200,
+            data: mapel
+        });
     } catch (error) {
         handleError(error, res);
     }
