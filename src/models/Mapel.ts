@@ -3,6 +3,7 @@ import { Schema, model, Document } from 'mongoose';
 export interface IMapel extends Document {
   kodeMapel: string;
   namaMapel: string;
+  description: string;
 }
 
 const mapelSchema = new Schema<IMapel>({
@@ -15,6 +16,10 @@ const mapelSchema = new Schema<IMapel>({
   namaMapel: {
     type: String,
     required: true
+  },
+  description: {
+    type: String,
+    required: false
   },
 }, {
   timestamps: true
