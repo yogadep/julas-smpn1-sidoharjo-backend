@@ -5,6 +5,7 @@ import userRouter from './router/user.routes';
 import authRouter from './router/auth.routes';
 import mapelRouter from './router/mapel.routes';
 import kelasRouter from './router/kelas.routes';
+import siswaRouter from './router/siswa.routes';
 
 dotenv.config(); // Panggil di sini saja
 
@@ -16,6 +17,7 @@ app.use('/api', userRouter);
 app.use('/api', authRouter);
 app.use('/api', mapelRouter);
 app.use('/api', kelasRouter);
+app.use('/api', siswaRouter);
 
 if (process.env.NODE_ENV !== 'production') {
     const startServer = async (): Promise<void> => {

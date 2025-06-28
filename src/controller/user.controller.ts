@@ -49,7 +49,6 @@ export const createUser = async (req: Request, res: Response) => {
     try {
         const validatedData = CreateUserSchema.parse(req.body);
         const newUser = await userService.createUser(validatedData);
-
         
         // Remove the 'return' and just send the response
         res.status(201).json({
