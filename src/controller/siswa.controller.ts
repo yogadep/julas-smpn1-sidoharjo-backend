@@ -36,6 +36,43 @@ export const getStudentById = async (req: Request, res: Response) => {
     }
 }
 
+export const getStudentsWithKelas = async (req: Request, res: Response) => {
+    try {
+        const students = await siswaService.getStudentsWithKelas();
+        res.status(200).json({
+            success: true,
+            message: 'Students with kelas data fetched successfully',
+            data: students
+        });
+    } catch (error) {
+        handleError(error, res);
+    }
+};
+
+export const getStudentsByKelasId = async (req: Request, res: Response) => {
+    try {
+        // Make sure parameter name matches your route definition
+        const { id } = req.params;
+        
+        if (!id) {
+            res.status(400).json({  
+                success: false,
+                message: 'Kelas ID is required'
+            });
+        }
+
+        const students = await siswaService.getStudentsByKelasId(id);
+        
+        res.status(200).json({  
+            success: true,
+            message: `Students in kelas ${id} fetched successfully`,
+            data: students
+        });
+    } catch (error) {
+        handleError(error, res);
+    }
+};
+
 export const createStudent = async (req: Request, res: Response) => {
     try {
         const validatedData = CreateSiswaSchema.parse(req.body);

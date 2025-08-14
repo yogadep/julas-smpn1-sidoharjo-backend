@@ -3,7 +3,7 @@ import { Schema, model, Document } from 'mongoose';
 export interface ISiswa extends Document {
   nis: string;
   nama: string;
-  kelas: string;
+  kelas: Schema.Types.ObjectId;
   jenisKelamin: 'laki-laki' | 'perempuan';
 }
 
@@ -18,7 +18,8 @@ const siswaSchema = new Schema<ISiswa>({
     required: true 
   },
   kelas: { 
-    type: String, 
+    type: Schema.Types.ObjectId, 
+    ref: 'Kelas', 
     required: true 
   },
   jenisKelamin: { 

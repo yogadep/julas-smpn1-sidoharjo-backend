@@ -1,8 +1,44 @@
 import { Siswa } from "../models/Siswa";
+import { Kelas } from "../models/Kelas";
 import { CreateSiswaDto, UpdateSiswaDto } from "../dto/siswa.validation";
 import { Types } from "mongoose";
 
 export class SiswaService {
+    async getStudentsWithKelas() {
+        try {
+            return await Siswa.find().populate('kelas', 'namaKelas description').lean();
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getStudentsByKelasId(kelasId: string) {
+        try {
+            return await Siswa.find({ kelas: kelasId })
+                .select('nis nama jenisKelamin')
+                .lean();
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async createStudent(data: CreateSiswaDto) {
+        try {
+            const student = await Siswa.create(data);
+            
+            // Update kelas dengan menambahkan siswa baru
+            await Kelas.findByIdAndUpdate(
+                data.kelas,
+                { $addToSet: { siswa: student._id } },
+                { new: true }
+            );
+            
+            return student;
+        } catch (error) {
+            throw error;
+        }
+    }
+    
     async getStudents() {
         try {
             const students = await Siswa.find().lean();
@@ -22,14 +58,14 @@ export class SiswaService {
         }
     }
 
-    async createStudent(data: CreateSiswaDto) {
-        try {
-            const student = await Siswa.create(data);
-            return student;
-        } catch (error) {
-            throw error;
-        }
-    }
+    // async createStudent(data: CreateSiswaDto) {
+    //     try {
+    //         const student = await Siswa.create(data);
+    //         return student;
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // }
 
     async updateStudent(data: UpdateSiswaDto, id: string) {
         try {

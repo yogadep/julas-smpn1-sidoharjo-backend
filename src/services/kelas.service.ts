@@ -21,6 +21,30 @@ export class KelasService {
         }
     }
 
+    async getKelasWithSiswa() {
+        try {
+            return await Kelas.find().populate({
+                path: 'siswa',
+                select: 'nis nama',
+                options: { sort: { nama: 1 } }
+            }).lean();
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getKelasByIdWithSiswa(id: string) {
+        try {
+            return await Kelas.findById(id).populate({
+                path: 'siswa',
+                select: 'nis nama jenisKelamin',
+                options: { sort: { nama: 1 } }
+            }).lean();
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async createKelas(data: CreateKelaslDto) {
         try {
             const kelas = await Kelas.create(data);

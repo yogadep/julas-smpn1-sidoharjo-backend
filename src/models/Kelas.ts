@@ -3,6 +3,7 @@ import { Schema, model, Document } from 'mongoose';
 export interface IKelas extends Document {
   namaKelas: string;
   description: string;
+  siswa: Schema.Types.ObjectId[]
 }
 
 const kelasSchema = new Schema<IKelas>({
@@ -14,6 +15,10 @@ const kelasSchema = new Schema<IKelas>({
     type: String,
     required: false
   },
+  siswa: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Siswa'
+  }]
 }, {
   timestamps: true
 });

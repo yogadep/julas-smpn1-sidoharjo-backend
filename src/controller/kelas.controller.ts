@@ -42,6 +42,42 @@ export const getKelasById = async ( req: Request, res: Response ) => {
     }
 }
 
+export const getKelasWithSiswa = async (req: Request, res: Response) => {
+    try {
+        const kelas = await kelasService.getKelasWithSiswa();
+        res.status(200).json({
+            success: true,
+            message: 'Kelas with siswa data fetched successfully',
+            data: kelas
+        });
+    } catch (error) {
+        handleError(error, res);
+    }
+};
+
+export const getKelasByIdWithSiswa = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const kelas = await kelasService.getKelasByIdWithSiswa(id);
+        
+        if (!kelas) {
+            res.status(404).json({ 
+                success: false, 
+                message: 'Kelas not found' 
+            });
+        }
+        
+        // No explicit return type needed
+        res.status(200).json({
+            success: true,
+            message: 'Kelas with siswa data fetched successfully',
+            data: kelas
+        });
+    } catch (error) {
+        handleError(error, res);
+    }
+}; // Let TypeScript infer the return type
+
 export const createKelas = async ( req: Request, res: Response ) => {
     try {
         const validatedData = CreateKelasSchema.parse(req.body);

@@ -45,11 +45,13 @@ const userSchema = new Schema<IUser>({
   },
   mataPelajaran: [{ 
     type: Schema.Types.ObjectId,
-    ref: 'Mapel'
+    ref: 'Mapel',
+    required: false,
   }],
   kelasYangDiampu: [{ 
     type: Schema.Types.ObjectId, 
-    ref: 'Kelas' 
+    ref: 'Kelas' ,
+    required: false
   }]
 }, { 
   timestamps: true 
