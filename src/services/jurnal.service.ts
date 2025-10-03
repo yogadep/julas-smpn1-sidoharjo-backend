@@ -4,9 +4,23 @@ import { CreateJurnalDto, UpdateJurnalDto } from "../dto/jurnal.validation";
 
 export class JurnalService {
     async getJurnal() {
+        return Jurnal.find()
+        //   .populate('guru', 'username')                  // ambil nama guru saja
+          .populate('guru', 'namaLengkap') 
+          .populate('kelas', 'namaKelas')                  // ambil nama kelas saja
+          .populate('mapel', 'namaMapel')                  // ambil nama mapel saja
+          .populate('siswaTidakHadir siswaIzin siswaSakit', 'nama') // 3 array siswa sekaligus
+          .lean();
+    }
+
+    async getJurnalByUser(userId: string) {
         try {
-            const jurnal = await Jurnal.find().lean();
-            return jurnal;
+            return await Jurnal.find({ guru: new Types.ObjectId(userId) })
+                .populate('guru', 'namaLengkap')
+                .populate('kelas', 'namaKelas')
+                .populate('mapel', 'namaMapel')
+                .sort({ tanggal: -1 })
+                .lean();
         } catch (error) {
             throw error;
         }
@@ -33,7 +47,8 @@ export class JurnalService {
                 .populate('guru', 'namaLengkap')
                 .populate('kelas', 'namaKelas')
                 .populate('mapel', 'namaMapel')
-                .sort({ tanggal: -1 })
+                .populate('siswaTidakHadir siswaIzin siswaSakit', 'nama')
+                .sort({ createdAt: -1 })
                 .lean();
         } catch (error) {
             throw error;

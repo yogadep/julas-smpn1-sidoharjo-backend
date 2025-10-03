@@ -19,6 +19,22 @@ export const getJurnal = async (req: Request, res: Response) => {
     }
 };
 
+// export const getJurnalByGuru = async (req: Request, res: Response) => {
+//     try {
+//         const { id } = req.params;
+//         const jurnal = await jurnalService.getJurnalByGuru(id);
+        
+//         res.status(200).json({
+//             success: true,
+//             message: 'Jurnal by guru fetched successfully',
+//             statusCode: 200,
+//             data: jurnal
+//         });
+//     } catch (error) {
+//         handleError(error, res);
+//     }
+// }
+
 export const getJurnalById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;

@@ -8,6 +8,7 @@ import mapelRouter from './router/mapel.routes';
 import kelasRouter from './router/kelas.routes';
 import siswaRouter from './router/siswa.routes';
 import jurnalRouter from './router/jurnal.routes';
+import jadwalRouter from './router/jadwal.routes';
 
 dotenv.config(); 
 
@@ -32,6 +33,7 @@ app.use('/api', mapelRouter);
 app.use('/api', kelasRouter);
 app.use('/api', siswaRouter);
 app.use('/api', jurnalRouter);
+app.use('/api', jadwalRouter);
 
 if (process.env.NODE_ENV !== 'production') {
     const startServer = async (): Promise<void> => {

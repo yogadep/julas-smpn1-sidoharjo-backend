@@ -38,7 +38,7 @@ export const createMapel = async (req: Request, res: Response) => {
         const mapel = await mapelService.createMapel(validatedData);
 
         res.status(201).json({
-            succwess: true,
+            success: true,
             message: 'Mapel created successfully',
             statusCode: 201,
             data: mapel
@@ -54,7 +54,7 @@ export const updateMapel = async (req: Request, res: Response) => {
         const mapel = await mapelService.updateMapel(req.params.id, validatedData);
 
         res.status(201).json({
-            succwess: true,
+            success: true,
             message: 'Mapel updated successfully',
             statusCode: 201,
             data: mapel

@@ -84,7 +84,7 @@ export const createKelas = async ( req: Request, res: Response ) => {
         const kelas = await kelasService.createKelas(validatedData);
 
         res.status(201).json({
-            succwess: true,
+            success: true,
             message: 'Kelas created successfully',
             statusCode: 201,
             data: kelas
@@ -100,7 +100,7 @@ export const updateKelas = async ( req: Request, res: Response ) => {
         const kelas = await kelasService.updateKelas(req.params.id, validatedData);
 
         res.status(201).json({
-            succwess: true,
+            success: true,
             message: 'Kelas updated successfully',
             statusCode: 201,
             data: kelas

@@ -22,6 +22,16 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
+export const logout = async (_req: Request, res: Response) => {
+  // Untuk stateless JWT, server tidak perlu “hapus sesi”.
+  // FE yang akan menghapus token. Endpoint ini sekadar memberi respons OK.
+  res.status(200).json({
+    success: true,
+    message: 'Logout successful',
+    statusCode: 200
+  });
+};
+
 // export const getCurrentUser = async (req: Request, res: Response) => {
 //   try {
 //     // req.user is set by the auth middleware

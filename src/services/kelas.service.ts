@@ -5,7 +5,8 @@ import { CreateKelaslDto, UpdateKelasDto } from "../dto/kelas.validation";
 export class KelasService {
     async getKelas() {
         try {
-            const kelas = await Kelas.find().lean();
+            const kelas = await Kelas.find()
+            .lean();
             return kelas;
         } catch (error) {
             throw error;
