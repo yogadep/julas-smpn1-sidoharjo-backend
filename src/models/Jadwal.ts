@@ -16,7 +16,7 @@ const jadwalSchema = new Schema<IJadwal>({
   kelas:      { type: Schema.Types.ObjectId, ref: 'Kelas', required: true },
   hari:       { type: String, enum: ['senin','selasa','rabu','kamis','jumat','sabtu'], required: true, lowercase: true, trim: true },
   jamKe:      { type: Number, required: true, min: 1, max: 8 },
-  mapel:      { type: Schema.Types.ObjectId, ref: 'Mapel', default: null },
+  mapel:      { type: Schema.Types.ObjectId, ref: 'Mapel', required: true },
   createdBy:  { type: Schema.Types.ObjectId, ref: 'User', required: true },
   updatedBy:  { type: Schema.Types.ObjectId, ref: 'User', default: null },
 }, { timestamps: true });

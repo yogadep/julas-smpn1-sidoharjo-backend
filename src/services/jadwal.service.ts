@@ -10,6 +10,7 @@ export class JadwalService {
       .populate({ path: "createdBy", select: userSelect })
       .populate({ path: "updatedBy", select: userSelect })
       .populate('kelas', 'namaKelas') 
+      .populate('mapel', 'namaMapel')
       .lean();
   }
 
@@ -18,6 +19,7 @@ export class JadwalService {
       .populate({ path: "createdBy", select: userSelect })
       .populate({ path: "updatedBy", select: userSelect })
       .populate('kelas', 'namaKelas') 
+      .populate('mapel', 'namaMapel')
       .lean();
   }
 
