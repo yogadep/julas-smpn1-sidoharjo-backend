@@ -4,14 +4,12 @@ import serverless from 'serverless-http';
 import { app } from '../server';
 import { connectDB } from '../config/db';
 
-// Gunakan singleton Promise agar cold start connect sekali, lalu reuse.
+// Cache promise supaya tidak connect berkali-kali di Lambda
 let dbReady: Promise<void> | null = null;
 function ensureDB() {
   if (!dbReady) {
     dbReady = connectDB().catch((err) => {
-      // Log error agar muncul di Vercel Logs
       console.error('MongoDB connection failed:', err);
-      // Propagate supaya 500 terlihat jelas
       throw err;
     });
   }
@@ -21,6 +19,6 @@ function ensureDB() {
 const handler = serverless(app);
 
 export default async function (req: VercelRequest, res: VercelResponse) {
-  await ensureDB();           // ⟵ pastikan DB tersambung dulu
+  await ensureDB();     // pastikan DB siap
   return handler(req as any, res as any);
 }

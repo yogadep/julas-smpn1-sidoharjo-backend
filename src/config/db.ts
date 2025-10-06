@@ -30,7 +30,8 @@ export async function connectDB() {
   }
 
   await mongoose.connect(uri, {
-    dbName: process.env.DB_NAME, // if the DB name isn’t in the URL path
+    dbName: process.env.DB_NAME, // jika DB name tidak ditulis di path URL
   });
   console.log('MongoDB connected');
 }
+

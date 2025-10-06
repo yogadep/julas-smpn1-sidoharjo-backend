@@ -52,7 +52,6 @@
 
 // export { app };
 
-
 // server.ts
 import express from 'express';
 import dotenv from 'dotenv';
@@ -72,23 +71,21 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-// ✅ CORS: whitelist dev & *.vercel.app (supaya FE Vercel bisa akses)
-const corsOptions = {
-  origin(origin: string | undefined, cb: (err: Error | null, ok?: boolean) => void) {
-    const whitelist = [
-      /^https?:\/\/localhost:3000$/,
-      /^https?:\/\/localhost:5173$/,
-      /\.vercel\.app$/   // semua subdomain vercel.app
-    ];
-    if (!origin || whitelist.some(rx => rx.test(origin))) return cb(null, true);
-    cb(new Error('Not allowed by CORS'));
+app.use(cors({
+  origin(origin, cb) {
+    const ok =
+      !origin ||
+      /^https?:\/\/localhost:(3000|5173)$/.test(origin || '') ||
+      /\.vercel\.app$/.test(origin || '');
+    cb(ok ? null : new Error('Not allowed by CORS'), ok);
   },
   credentials: true,
   optionsSuccessStatus: 204
-};
-
-app.use(cors(corsOptions));
+}));
 app.use(express.json());
+
+// // (opsional tapi membantu cek cepat)
+// app.get('/api/health', (_req, res) => res.json({ ok: true }));
 
 app.use('/api', userRouter);
 app.use('/api', authRouter);
@@ -98,7 +95,7 @@ app.use('/api', siswaRouter);
 app.use('/api', jurnalRouter);
 app.use('/api', jadwalRouter);
 
-// 🚫 Jangan listen di Vercel (serverless). Hanya listen saat lokal/dev.
+// HANYA listen saat dev
 if (process.env.NODE_ENV !== 'production') {
   (async () => {
     try {
@@ -111,4 +108,5 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export { app };
+
 
