@@ -52,10 +52,11 @@
 
 // export { app };
 
-// server.ts
+// src/server.ts
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import serverless from 'serverless-http';                   // ⬅️ tambah ini
 import { connectDB } from './config/db';
 
 import userRouter from './router/user.routes';
@@ -82,10 +83,8 @@ app.use(cors({
   credentials: true,
   optionsSuccessStatus: 204
 }));
-app.use(express.json());
 
-// // (opsional tapi membantu cek cepat)
-// app.get('/api/health', (_req, res) => res.json({ ok: true }));
+app.use(express.json());
 
 app.use('/api', userRouter);
 app.use('/api', authRouter);
@@ -95,7 +94,7 @@ app.use('/api', siswaRouter);
 app.use('/api', jurnalRouter);
 app.use('/api', jadwalRouter);
 
-// HANYA listen saat dev
+// Dev-only: jalankan server lokal
 if (process.env.NODE_ENV !== 'production') {
   (async () => {
     try {
@@ -107,6 +106,24 @@ if (process.env.NODE_ENV !== 'production') {
   })();
 }
 
+// ====== PRODUKSI (Vercel): default export harus function/server ======
+// Pastikan koneksi DB saat cold start Lambda
+let wrapped: any;
+async function ensureHandler() {
+  if (!wrapped) {
+    await connectDB();              // konek sekali per cold start
+    wrapped = serverless(app);      // bungkus express -> handler serverless
+  }
+  return wrapped;
+}
+
+// Default export untuk Vercel (@vercel/node)
+export default async function (req: any, res: any) {
+  const handler = await ensureHandler();
+  return handler(req, res);
+}
+
+// Ekspor app untuk testing jika perlu
 export { app };
 
 
