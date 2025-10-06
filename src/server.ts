@@ -56,7 +56,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import serverless from 'serverless-http';                   // ⬅️ tambah ini
+import mongoose from 'mongoose';
 import { connectDB } from './config/db';
 
 import userRouter from './router/user.routes';
@@ -72,6 +72,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+// --- CORS ---
 app.use(cors({
   origin(origin, cb) {
     const ok =
@@ -86,6 +87,16 @@ app.use(cors({
 
 app.use(express.json());
 
+// (opsional) timeout per-request biar nggak ngegantung 5 menit
+app.use((req, res, next) => {
+  req.setTimeout(20_000, () => {
+    console.warn('Request timeout:', req.method, req.url);
+    if (!res.headersSent) res.status(504).send('Gateway Timeout');
+  });
+  next();
+});
+
+// --- ROUTES ---
 app.use('/api', userRouter);
 app.use('/api', authRouter);
 app.use('/api', mapelRouter);
@@ -94,36 +105,35 @@ app.use('/api', siswaRouter);
 app.use('/api', jurnalRouter);
 app.use('/api', jadwalRouter);
 
-// Dev-only: jalankan server lokal
+// Tambahkan health check endpoint
+app.get('/', (req, res) => {
+    res.json({ status: 'API is running' });
+});
+
+app.use((_req, res) => {
+    res.status(404).json({ error: 'Not Found' });
+  });
+  
+
+// error handler
+app.use((err: any, _req: any, res: any, _next: any) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ error: 'Internal Server Error' });
+});
+
+// --- DB CONNECT ---
+// Pastikan connect sekali di cold start (baik dev maupun prod)
+connectDB().catch(err => {
+  console.error('Mongo connect error:', err);
+});
+
+// HANYA listen saat dev (local). Di Vercel JANGAN listen.
 if (process.env.NODE_ENV !== 'production') {
-  (async () => {
-    try {
-      await connectDB();
-      app.listen(port, () => console.log(`App listening on port: ${port}`));
-    } catch (error: any) {
-      console.error(`Gagal terhubung ke server: ${error.message}`);
-    }
-  })();
+  app.listen(port, () => console.log(`App listening on port: ${port}`));
 }
 
-// ====== PRODUKSI (Vercel): default export harus function/server ======
-// Pastikan koneksi DB saat cold start Lambda
-let wrapped: any;
-async function ensureHandler() {
-  if (!wrapped) {
-    await connectDB();              // konek sekali per cold start
-    wrapped = serverless(app);      // bungkus express -> handler serverless
-  }
-  return wrapped;
-}
+// Penting: default export untuk @vercel/node
+export default app;
 
-// Default export untuk Vercel (@vercel/node)
-export default async function (req: any, res: any) {
-  const handler = await ensureHandler();
-  return handler(req, res);
-}
-
-// Ekspor app untuk testing jika perlu
-export { app };
 
 

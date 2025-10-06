@@ -1,21 +1,4 @@
-// import mongoose from "mongoose";
-
-// export const connectDB = async () => {
-//     try {
-//         const uri = process.env.DATABASE_URL;
-//         console.log(`URI: ${uri}`);
-
-//         if (!uri) throw new Error("DATABASE_URL is not defined in .env");
-
-//         await mongoose.connect(uri);
-//         console.log("✅ Database connected");
-//     } catch (error) {
-//         console.error("❌ DB connection error:", error);
-//         throw error;
-//     }
-// };
-
-// config/db.ts
+// src/config/db.ts
 import mongoose from 'mongoose';
 
 export async function connectDB() {
@@ -30,8 +13,10 @@ export async function connectDB() {
   }
 
   await mongoose.connect(uri, {
-    dbName: process.env.DB_NAME, // jika DB name tidak ditulis di path URL
+    dbName: process.env.DB_NAME,           // optional (isi kalau URL kamu tidak punya path db)
+    serverSelectionTimeoutMS: 10_000,      // ⬅️ gagal cepat (10 detik)
+    socketTimeoutMS: 45_000                // ⬅️ jangan nunggu terlalu lama
   });
+
   console.log('MongoDB connected');
 }
-
