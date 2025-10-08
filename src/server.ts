@@ -73,16 +73,28 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // --- CORS ---
+// app.use(cors({
+//   origin(origin, cb) {
+//     const ok =
+//       !origin ||
+//       /^https?:\/\/localhost:(3000|5173)$/.test(origin || '') ||
+//       /\.vercel\.app$/.test(origin || '');
+//     cb(ok ? null : new Error('Not allowed by CORS'), ok);
+//   },
+//   credentials: true,
+//   optionsSuccessStatus: 204
+// }));
+
+// CORS configuration yang lebih simple
 app.use(cors({
-  origin(origin, cb) {
-    const ok =
-      !origin ||
-      /^https?:\/\/localhost:(3000|5173)$/.test(origin || '') ||
-      /\.vercel\.app$/.test(origin || '');
-    cb(ok ? null : new Error('Not allowed by CORS'), ok);
-  },
+  origin: [
+    'https://julas-smpn1-sidoharjo-frontend-zpdv.vercel.app',
+    'http://localhost:3000',
+    'http://localhost:5173'
+  ],
   credentials: true,
-  optionsSuccessStatus: 204
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
